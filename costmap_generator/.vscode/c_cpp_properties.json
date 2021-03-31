@@ -1,0 +1,23 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "",
+        "limitSymbolsToIncludedHeaders": true
+      },
+      "includePath": [
+        "/home/matyko/catkin_ws/devel/include/**",
+        "/opt/ros/melodic/include/**",
+        "/home/matyko/catkin_ws/src/szenergy-utility-programs/gps_quick_compare/include/**",
+        "/home/matyko/catkin_ws/src/szenergy-utility-programs/gps_tf_publisher/include/**",
+        "/home/matyko/catkin_ws/src/szenergy-parking-challenge/include/**",
+        "/home/matyko/catkin_ws/src/nissan_leaf_ros/nissan_bringup/include/**",
+        "/home/matyko/catkin_ws/src/path_pub/include/**",
+        "/home/matyko/catkin_ws/src/shell_simulation/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS"
+    }
+  ],
+  "version": 4
+}

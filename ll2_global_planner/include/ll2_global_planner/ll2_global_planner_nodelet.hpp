@@ -63,6 +63,7 @@ class Ll2GlobalPlannerNl : public nodelet::Nodelet {
   lanelet::LaneletMapPtr lanelet_map_ = nullptr;
   lanelet::traffic_rules::TrafficRulesPtr traffic_rules_ = nullptr;
   lanelet::routing::RoutingGraphUPtr routing_graph_ = nullptr;
+  std::string map_frame;
 };
 
 }  // namespace ll2_global_planner

@@ -58,6 +58,8 @@ void Ll2GlobalPlannerNl::laneletMapCb(const autoware_lanelet2_msgs::MapBin& map_
   traffic_rules_ = traffic_rules::TrafficRulesFactory::instance().create(Locations::Germany, Participants::Vehicle);
   routing_graph_ = routing::RoutingGraph::build(*lanelet_map_, *traffic_rules_);
 
+  map_frame = map_msg.header.frame_id;
+
   initialized_ = true;
   ROS_INFO("Loaded Lanelet map");
 }
@@ -134,6 +136,19 @@ void Ll2GlobalPlannerNl::planRoute(const BasicPoint2d& goal_point)
   lane_msg.header.stamp = ros::Time(0);
   lane_msg.header.frame_id = "map";
   lane_msg.is_blocked = false;
+
+  geometry_msgs::TransformStamped tfstamped;
+
+  try {
+    tfstamped = tf_buffer_.lookupTransform("map",map_frame,ros::Time(0));
+  } catch (tf2::TransformException &ex) {
+    ROS_WARN("Could NOT transform %s to map: %s", map_frame.c_str(),ex.what());
+  }
+
+  for(int i = 0;i < (int)lane_msg.waypoints.size();i++)
+  {
+    tf2::doTransform(lane_msg.waypoints[i].pose,lane_msg.waypoints[i].pose,tfstamped);
+  }
 
   autoware_msgs::LaneArray lane_array_msg;
   lane_array_msg.lanes.push_back(lane_msg);

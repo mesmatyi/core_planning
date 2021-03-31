@@ -91,18 +91,35 @@ void CostmapGeneratorLanelet2::loadRoadAreasFromLaneletMap(const lanelet::Lanele
   // convert lanelets to polygons and put into area_points array
   for (const auto& ll : road_lanelets)
   {
-    geometry_msgs::Polygon poly;
-    lanelet::visualization::lanelet2Polygon(ll, &poly);
+    // geometry_msgs::Polygon poly;
+    // lanelet::visualization::lanelet2Polygon(ll, &poly);
 
-    std::vector<geometry_msgs::Point> poly_pts;
-    for (const auto& p : poly.points)
+    // std::vector<geometry_msgs::Point> poly_pts;
+    // for (const auto& p : poly.points)
+    // {
+    //   // convert from Point32 to Point
+    //   geometry_msgs::Point gp;
+    //   lanelet::utils::conversion::toGeomMsgPt(p, &gp);
+    //   poly_pts.push_back(gp);
+    // }
+    std::vector<geometry_msgs::Polygon> triangles;
+    lanelet::visualization::lanelet2Triangle(ll, &triangles);
+
+    for (const auto& triangle : triangles)
     {
-      // convert from Point32 to Point
-      geometry_msgs::Point gp;
-      lanelet::utils::conversion::toGeomMsgPt(p, &gp);
-      poly_pts.push_back(gp);
-    }
+      std::vector<geometry_msgs::Point> poly_pts;
+      for (const auto& p : triangle.points)
+      {
+        // convert from Point32 to Point
+        geometry_msgs::Point gp;
+        gp.x = p.x;
+        gp.y = p.y;
+        gp.z = p.z;
+        poly_pts.push_back(gp);
+      }
+
     area_points->push_back(poly_pts);
+    }
   }
 
   has_subscribed_wayarea_ = true;

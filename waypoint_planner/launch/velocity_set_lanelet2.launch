@@ -15,7 +15,7 @@
   <arg name="deceleration_obstacle" default="0.8" />
   <arg name="deceleration_stopline" default="0.6" />
   <arg name="velocity_change_limit" default="9.972" />
-  <arg name="deceleration_range" default="0" />
+  <arg name="deceleration_range" default="20  " />
   <arg name="temporal_waypoints_size" default="100" />
 
   <node pkg="waypoint_planner" type="velocity_set_lanelet2" name="velocity_set" output="screen">

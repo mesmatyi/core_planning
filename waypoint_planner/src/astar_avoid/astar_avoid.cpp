@@ -110,6 +110,8 @@ void AstarAvoid::run()
   ros::WallTime start_plan_time = ros::WallTime::now();
   ros::WallTime start_avoid_time = ros::WallTime::now();
 
+  
+
   // reset obstacle index
   obstacle_waypoint_index_ = -1;
 
@@ -133,6 +135,7 @@ void AstarAvoid::run()
     // avoidance mode
     bool found_obstacle = (obstacle_waypoint_index_ >= 0);
     bool avoid_velocity = (current_velocity_.twist.linear.x < avoid_start_velocity_ / 3.6);
+
 
     // update state
     if (state_ == AstarAvoid::STATE::RELAYING)
