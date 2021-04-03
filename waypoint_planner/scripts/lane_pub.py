@@ -63,6 +63,10 @@ def Lanearraycb(LaneMSG):
 
     newLane = LaneMSG.lanes[0]
 
+    for i in range(1,len(LaneMSG.lanes)):
+        for i in range(len(LaneMSG.lanes[i].waypoints)):
+            newLane.waypoints.append(LaneMSG.lanes[i].waypoints[i])
+
     for waypoint in newLane.waypoints:
         waypoint.pose.header.frame_id = 'map'
         waypoint.twist.header.frame_id = 'map'
@@ -91,12 +95,12 @@ def talker():
     rospy.init_node('talker', anonymous=True)
     rospy.Subscriber('lane_waypoints_array',LaneArray,Lanearraycb)
     rospy.Subscriber('/current_pose',PoseStamped,closestWaypoint)
-    rospy.Subscriber('/safety_waypoints',Lane,safety_Lane)
+    #rospy.Subscriber('/safety_waypoints',Lane,safety_Lane)
     pub = rospy.Publisher('base_waypoints', Lane, queue_size=10)
     cl_waypoint_pub = rospy.Publisher('closest_waypoint',Int32,queue_size=10)
-    sf_pub = rospy.Publisher('safety_waypoints_array',LaneArray,queue_size=10)
+    #sf_pub = rospy.Publisher('safety_waypoints_array',LaneArray,queue_size=10)
     rospy.spin()
-    
+
 
 if __name__ == '__main__':
     try:

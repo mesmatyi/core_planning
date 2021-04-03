@@ -39,8 +39,8 @@
 #include <waypoint_planner/velocity_set/velocity_set_path.h>
 
 constexpr int LOOP_RATE = 10;
-constexpr double DECELERATION_SEARCH_DISTANCE = 30;
-constexpr double STOP_SEARCH_DISTANCE = 60;
+constexpr double DECELERATION_SEARCH_DISTANCE = 80;
+constexpr double STOP_SEARCH_DISTANCE = 80;
 
 static lanelet::LaneletMapPtr g_lanelet_map;
 static bool g_loaded_lanelet_map;
