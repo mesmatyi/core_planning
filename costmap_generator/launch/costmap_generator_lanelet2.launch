@@ -1,7 +1,7 @@
 <launch>
   <!-- node parameters -->
-  <arg name="lidar_frame" default="velodyne" />
-  <arg name="map_frame" default="map" />
+  <arg name="lidar_frame" default="base_link" />
+  <arg name="map_frame" default="map_zala_0" />
   <arg name="grid_min_value" default="0.0" />
   <arg name="grid_max_value" default="1.0" />
   <arg name="grid_resolution" default="0.2" />

@@ -100,6 +100,8 @@ private:
   ros::Subscriber sub_points_;
   ros::Subscriber sub_objects_;
 
+  std_msgs::Header in_header;
+
   tf::TransformListener tf_listener_;
 
   std::vector<std::vector<geometry_msgs::Point>> area_points_;

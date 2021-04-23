@@ -38,9 +38,9 @@
 #include <waypoint_planner/velocity_set/velocity_set_info.h>
 #include <waypoint_planner/velocity_set/velocity_set_path.h>
 
-constexpr int LOOP_RATE = 10;
-constexpr double DECELERATION_SEARCH_DISTANCE = 80;
-constexpr double STOP_SEARCH_DISTANCE = 80;
+constexpr int LOOP_RATE = 30;
+constexpr double DECELERATION_SEARCH_DISTANCE = 30;
+constexpr double STOP_SEARCH_DISTANCE = 60;
 
 static lanelet::LaneletMapPtr g_lanelet_map;
 static bool g_loaded_lanelet_map;
@@ -228,6 +228,7 @@ int detectStopObstacle(const pcl::PointCloud<pcl::PointXYZ>& points, const int c
   // start search from the closest waypoint
   for (int i = closest_waypoint; i < closest_waypoint + STOP_SEARCH_DISTANCE; i++)
   {
+    ROS_DEBUG("Closest waypoint: %i",closest_waypoint);
     // reach the end of waypoints
     if (i >= static_cast<int>(lane.waypoints.size()))
       break;
@@ -699,7 +700,7 @@ int main(int argc, char** argv)
 
     if (!vs_info.getSetPose() || !vs_path.getSetPath())
     {
-      loop_rate.sleep();
+      //loop_rate.sleep();
       continue;
     }
 
@@ -747,7 +748,7 @@ int main(int argc, char** argv)
     stopline_waypoint_pub.publish(stopline_waypoint_index);
 
     vs_path.resetFlag();
-    loop_rate.sleep();
+    //loop_rate.sleep();
   }
 
   return 0;

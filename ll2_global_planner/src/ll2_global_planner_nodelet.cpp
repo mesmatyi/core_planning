@@ -97,7 +97,7 @@ void Ll2GlobalPlannerNl::planRoute(const BasicPoint2d& goal_point)
   geometry_msgs::TransformStamped tf_msg;
   try
   {
-    tf_msg = tf_buffer_.lookupTransform("map", "base_link", ros::Time(0), ros::Duration(2.0));
+    tf_msg = tf_buffer_.lookupTransform(map_frame, "base_link", ros::Time(0), ros::Duration(2.0));
   }
   catch (tf2::TransformException &ex)
   {

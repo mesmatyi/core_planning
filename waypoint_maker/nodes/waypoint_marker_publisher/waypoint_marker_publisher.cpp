@@ -99,7 +99,7 @@ void createGlobalLaneArrayVelocityMarker(const autoware_msgs::LaneArray& lane_wa
   velocity_marker.header.stamp = ros::Time::now();
   velocity_marker.type = visualization_msgs::Marker::TEXT_VIEW_FACING;
   velocity_marker.action = visualization_msgs::Marker::ADD;
-  velocity_marker.scale.z = 0.4;
+  velocity_marker.scale.z = 0.9;
   velocity_marker.color.r = 1;
   velocity_marker.color.g = 1;
   velocity_marker.color.b = 1;
@@ -140,7 +140,7 @@ void createGlobalLaneArrayChangeFlagMarker(const autoware_msgs::LaneArray& lane_
   marker.header.stamp = ros::Time::now();
   marker.type = visualization_msgs::Marker::TEXT_VIEW_FACING;
   marker.action = visualization_msgs::Marker::ADD;
-  marker.scale.z = 0.4;
+  marker.scale.z = 0.9;
   marker.color.r = 1;
   marker.color.g = 1;
   marker.color.b = 1;
@@ -257,9 +257,9 @@ void createGlobalLaneArrayOrientationMarker(const autoware_msgs::LaneArray& lane
   lane_waypoint_marker.header.stamp = ros::Time::now();
   lane_waypoint_marker.type = visualization_msgs::Marker::ARROW;
   lane_waypoint_marker.action = visualization_msgs::Marker::ADD;
-  lane_waypoint_marker.scale.x = 0.25;
-  lane_waypoint_marker.scale.y = 0.05;
-  lane_waypoint_marker.scale.z = 0.05;
+  lane_waypoint_marker.scale.x = 0.8;
+  lane_waypoint_marker.scale.y = 0.3;
+  lane_waypoint_marker.scale.z = 0.3;
   lane_waypoint_marker.color.r = 1.0;
   lane_waypoint_marker.color.a = 1.0;
   lane_waypoint_marker.frame_locked = true;
@@ -290,9 +290,9 @@ void createGlobalLaneArrayTurnMarker(const autoware_msgs::LaneArray& lane_waypoi
   lane_waypoint_marker.header.stamp = ros::Time::now();
   lane_waypoint_marker.type = visualization_msgs::Marker::ARROW;
   lane_waypoint_marker.action = visualization_msgs::Marker::ADD;
-  lane_waypoint_marker.scale.x = 0.25;
-  lane_waypoint_marker.scale.y = 0.05;
-  lane_waypoint_marker.scale.z = 0.05;
+  lane_waypoint_marker.scale.x = 0.8;
+  lane_waypoint_marker.scale.y = 0.3;
+  lane_waypoint_marker.scale.z = 0.3;
   lane_waypoint_marker.color.r = 1.0;
   lane_waypoint_marker.color.g = 1.0;
   lane_waypoint_marker.color.a = 1.0;

@@ -8,6 +8,11 @@ GPATH
 __pycache__/
 *.py[co]
 
+build/
+install/
+log/
+waypoint_planner/.vscode/
+
 # editor backup files
 *~
 \#*\#
