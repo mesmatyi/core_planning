@@ -8,7 +8,7 @@
   <arg name="costmap_topic" default="/semantics/costmap_generator/occupancy_grid" />
   <arg name="enable_avoidance" default="true" />
   <arg name="avoid_waypoints_velocity" default="10.0" />
-  <arg name="avoid_start_velocity" default="25.0" />
+  <arg name="avoid_start_velocity" default="30.0" />
   <arg name="replan_interval" default="1.0" />
   <arg name="search_waypoints_size" default="50" />
   <arg name="search_waypoints_delta" default="2" />
@@ -18,7 +18,7 @@
   <arg name="use_back" default="false" />
   <arg name="use_potential_heuristic" default="true" />
   <arg name="use_wavefront_heuristic" default="false" />
-  <arg name="time_limit" default="5.0" />
+  <arg name="time_limit" default="60.0" />
   <arg name="robot_length" default="4.5" />
   <arg name="robot_width" default="1.75" />
   <arg name="robot_base2back" default="1.0" />
