@@ -15,11 +15,11 @@
   <arg name="decel_limit" default="0.3" />
   <arg name="lateral_accel_limit" default="2.0" />
   <arg name="use_decision_maker" default="false" />
-  <arg name="subscribe_waypoints" default="final_waypoints_arr" />
-  <arg name="publish_waypoints" default="final_waypoints_rp" />
+  <arg name="subscribe_waypoints" default="final_waypoints" />
+  <arg name="publish_waypoints" default="final_waypoints_for_MPC" />
 
 
-  <node pkg="waypoint_maker" type="waypoint_replanner" name="waypoint_replanner" output="screen">
+  <node pkg="waypoint_maker" type="waypoint_replanner" name="waypoint_replanner_for_final_wp" output="screen">
     <param name="replanning_mode" value="$(arg replanning_mode)" />
     <param name="realtime_tuning_mode" value="$(arg realtime_tuning_mode)" />
     <param name="resample_mode" value="$(arg resample_mode)" />
@@ -33,8 +33,5 @@
     <param name="decel_limit" value="$(arg decel_limit)" />
     <param name="lateral_accel_limit" value="$(arg lateral_accel_limit)" />
     <param name="use_decision_maker" value="$(arg use_decision_maker)" />
-    <param name="subscribe_waypoints" value="$(arg subscribe_waypoints)" />
-    <param name="publish_waypoints" value="$(arg publish_waypoints)" />
   </node>
-  <node pkg="waypoint_maker" type="waypoint_marker_publisher" name="waypoint_marker_publisher" />
 </launch>

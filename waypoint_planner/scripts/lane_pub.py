@@ -12,6 +12,8 @@ from std_msgs.msg import Int32
 
 pub = None
 cl_waypoint_pub = None
+final_wp_arr = None
+final_wp_MPC = None
 sf_pub = None
 
 newLane = Lane()
@@ -89,15 +91,41 @@ def Lanearraycb(LaneMSG):
         while True:
             pub.publish(newLane)
             rate.sleep()
+            
+def LanetoLaneArr(msg):
+    global final_wp_arr
+      
+    LaneArr = LaneArray()
+    LaneArr.id = 0
+    LaneArr.lanes.append(msg)
+    
+    if final_wp_arr is not None:
+        final_wp_arr.publish(LaneArr)
+        
+        
+def LaneArrtoLane(msg):
+    global final_wp_MPC
+    
+    lane = Lane()
+    lane = msg.lanes[0]
+    
+    if final_wp_MPC is not None:
+        final_wp_MPC.publish(lane)
+    
+    
 
 def talker():
-    global pub,cl_waypoint_pub,sf_pub
+    global pub,cl_waypoint_pub,sf_pub,final_wp_arr,final_wp_MPC
     rospy.init_node('talker', anonymous=True)
-    rospy.Subscriber('lane_waypoints_array',LaneArray,Lanearraycb)
+    rospy.Subscriber('based/lane_waypoints_raw',LaneArray,Lanearraycb)
     rospy.Subscriber('/current_pose',PoseStamped,closestWaypoint)
+    rospy.Subscriber('final_waypoints',Lane,LanetoLaneArr)
+    rospy.Subscriber('final_waypoints_rp',LaneArray,LaneArrtoLane)
     #rospy.Subscriber('/safety_waypoints',Lane,safety_Lane)
     pub = rospy.Publisher('base_waypoints', Lane, queue_size=10)
     cl_waypoint_pub = rospy.Publisher('closest_waypoint',Int32,queue_size=10)
+    final_wp_arr = rospy.Publisher('final_waypoints_arr',LaneArray,queue_size=10)
+    final_wp_MPC = rospy.Publisher('final_waypoints_for_MPC',Lane,queue_size=10)
     #sf_pub = rospy.Publisher('safety_waypoints_array',LaneArray,queue_size=10)
     rospy.spin()
 

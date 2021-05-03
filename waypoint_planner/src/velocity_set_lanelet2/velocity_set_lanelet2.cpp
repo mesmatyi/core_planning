@@ -38,7 +38,7 @@
 #include <waypoint_planner/velocity_set/velocity_set_info.h>
 #include <waypoint_planner/velocity_set/velocity_set_path.h>
 
-constexpr int LOOP_RATE = 30;
+constexpr int LOOP_RATE = 50;
 constexpr double DECELERATION_SEARCH_DISTANCE = 30;
 constexpr double STOP_SEARCH_DISTANCE = 60;
 

@@ -200,7 +200,11 @@ void createLocalWaypointVelocityMarker(std_msgs::ColorRGBA color, int closest_wa
   velocity.type = visualization_msgs::Marker::TEXT_VIEW_FACING;
   velocity.action = visualization_msgs::Marker::ADD;
   velocity.scale.z = 0.4;
-  velocity.color = color;
+  //velocity.color = color;
+  velocity.color.r = 1.0;
+  velocity.color.g = 1.0;
+  velocity.color.b = 1.0;
+  velocity.color.a = 1.0;
   velocity.frame_locked = true;
 
   for (int i = 0; i < static_cast<int>(lane_waypoint.waypoints.size()); i++)
@@ -361,29 +365,33 @@ void createLocalPathMarker(std_msgs::ColorRGBA color, const autoware_msgs::Lane&
   g_local_waypoints_marker_array.markers.push_back(lane_waypoint_marker);
 }
 
-void createLocalPointMarker(const autoware_msgs::Lane& lane_waypoint)
+void createLocalArrowMarker(const autoware_msgs::Lane& lane_waypoint)
 {
   visualization_msgs::Marker lane_waypoint_marker;
   lane_waypoint_marker.header.frame_id = "map";
   lane_waypoint_marker.header.stamp = ros::Time::now();
-  lane_waypoint_marker.ns = "local_point_marker";
-  lane_waypoint_marker.id = 0;
-  lane_waypoint_marker.type = visualization_msgs::Marker::CUBE_LIST;
+  lane_waypoint_marker.ns = "local_wp_arrow";
+  lane_waypoint_marker.type = visualization_msgs::Marker::ARROW;
   lane_waypoint_marker.action = visualization_msgs::Marker::ADD;
-  lane_waypoint_marker.scale.x = 0.2;
-  lane_waypoint_marker.scale.y = 0.2;
-  lane_waypoint_marker.scale.z = 0.2;
-  lane_waypoint_marker.color.r = 1.0;
+  lane_waypoint_marker.scale.x = 0.8;
+  lane_waypoint_marker.scale.y = 0.3;
+  lane_waypoint_marker.scale.z = 0.3;
+  lane_waypoint_marker.color.r = 0.22;
+  lane_waypoint_marker.color.r = 0.89;
+  lane_waypoint_marker.color.b = 0.23;
   lane_waypoint_marker.color.a = 1.0;
   lane_waypoint_marker.frame_locked = true;
 
   for (unsigned int i = 0; i < lane_waypoint.waypoints.size(); i++)
   {
-    geometry_msgs::Point point;
-    point = lane_waypoint.waypoints[i].pose.pose.position;
-    lane_waypoint_marker.points.push_back(point);
+    // geometry_msgs::Point point;
+    // point = lane_waypoint.waypoints[i].pose.pose.position;
+    // lane_waypoint_marker.points.push_back(point);
+
+    lane_waypoint_marker.id = i + 1;
+    lane_waypoint_marker.pose = lane_waypoint.waypoints[i].pose.pose;
+    g_local_waypoints_marker_array.markers.push_back(lane_waypoint_marker);
   }
-  g_local_waypoints_marker_array.markers.push_back(lane_waypoint_marker);
 }
 
 void lightCallback(const autoware_msgs::TrafficLightConstPtr& msg)
@@ -455,8 +463,8 @@ void finalCallback(const autoware_msgs::LaneConstPtr& msg)
   g_local_waypoints_marker_array.markers.clear();
   if (_closest_waypoint != -1)
     createLocalWaypointVelocityMarker(g_local_color, _closest_waypoint, *msg);
-  createLocalPathMarker(g_local_color, *msg);
-  createLocalPointMarker(*msg);
+  // createLocalPathMarker(g_local_color, *msg);
+  createLocalArrowMarker(*msg);
   setLifetime(0.5, &g_local_waypoints_marker_array);
   publishMarkerArray(g_local_waypoints_marker_array, g_local_mark_pub);
 }
@@ -478,11 +486,11 @@ int main(int argc, char** argv)
   ros::Subscriber light_managed_sub = nh.subscribe("light_color_managed", 10, receiveManualDetection);
 
   // subscribe global waypoints
-  ros::Subscriber lane_array_sub = nh.subscribe("lane_waypoints_array", 10, laneArrayCallback);
+  ros::Subscriber lane_array_sub = nh.subscribe("based/lane_waypoints_raw", 10, laneArrayCallback);
   ros::Subscriber traffic_array_sub = nh.subscribe("traffic_waypoints_array", 10, laneArrayCallback);
 
   // subscribe local waypoints
-  ros::Subscriber final_sub = nh.subscribe("final_waypoints", 10, finalCallback);
+  ros::Subscriber final_sub = nh.subscribe("final_waypoints_for_MPC", 10, finalCallback);
   ros::Subscriber closest_sub = nh.subscribe("closest_waypoint", 10, closestCallback);
 
   // subscribe config
