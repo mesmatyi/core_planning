@@ -55,3 +55,5 @@ ENV/
 
 # VCS-populated Folders
 src/
+.vscode/settings.json
+costmap_generator/.vscode/settings.json

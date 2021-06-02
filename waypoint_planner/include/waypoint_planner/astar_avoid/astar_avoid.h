@@ -75,6 +75,7 @@ private:
   int search_waypoints_size_;       // range of waypoints for incremental search [-]
   int search_waypoints_delta_;      // skipped waypoints for incremental search [-]
   int closest_search_size_;         // search closest waypoint around your car [-]
+  int start_waypoint_index;
 
   // classes
   AstarSearch astar_;
@@ -95,7 +96,7 @@ private:
   autoware_msgs::Lane avoid_waypoints_;
   autoware_msgs::Lane current_waypoints_;
   geometry_msgs::PoseStamped current_pose_local_, current_pose_global_;
-  geometry_msgs::PoseStamped goal_pose_local_, goal_pose_global_;
+  geometry_msgs::PoseStamped goal_pose_local_, goal_pose_global_,start_pose_global,start_pose_local;
   geometry_msgs::TwistStamped current_velocity_;
   tf::Transform local2costmap_;  // local frame (e.g. velodyne) -> costmap origin
 

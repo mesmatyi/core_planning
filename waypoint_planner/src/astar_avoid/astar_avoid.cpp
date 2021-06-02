@@ -256,7 +256,7 @@ bool AstarAvoid::planAvoidWaypoints(int& end_of_avoid_index)
     return false;
   }
 
-  // update goal pose incrementally and execute A* search
+  // update start and goal pose incrementally and execute A* search
   for (int i = search_waypoints_delta_; i < static_cast<int>(search_waypoints_size_); i += search_waypoints_delta_)
   {
     // update goal index
@@ -264,22 +264,29 @@ bool AstarAvoid::planAvoidWaypoints(int& end_of_avoid_index)
     //       However, obstacle_waypoint_index_ is published by velocity_set node. The astar_avoid and velocity_set
     //       should be combined together to prevent this kind of inconsistency.
     int goal_waypoint_index = closest_waypoint_index_ + obstacle_waypoint_index_ + i;
+    start_waypoint_index = (closest_waypoint_index_ + obstacle_waypoint_index_) - i;
     if (goal_waypoint_index >= static_cast<int>(avoid_waypoints_.waypoints.size()))
     {
       break;
     }
+    if(start_waypoint_index < closest_waypoint_index_)
+    {
+      start_waypoint_index = closest_waypoint_index_;
+    }
 
     // update goal pose
     goal_pose_global_ = avoid_waypoints_.waypoints[goal_waypoint_index].pose;
+    start_pose_global = avoid_waypoints_.waypoints[start_waypoint_index].pose;
     goal_pose_local_.header = costmap_.header;
-    goal_pose_local_.pose = transformPose(goal_pose_global_.pose,
-                                          getTransform(costmap_.header.frame_id, goal_pose_global_.header.frame_id));
+    start_pose_local.header = costmap_.header;
+    goal_pose_local_.pose = transformPose(goal_pose_global_.pose,getTransform(costmap_.header.frame_id, goal_pose_global_.header.frame_id));
+    start_pose_local.pose = transformPose(start_pose_global.pose,getTransform(costmap_.header.frame_id, start_pose_global.header.frame_id));
 
     // initialize costmap for A* search
     astar_.initialize(costmap_);
 
     // execute astar search
-    found_path = astar_.makePlan(current_pose_local_.pose, goal_pose_local_.pose);
+    found_path = astar_.makePlan(start_pose_local.pose, goal_pose_local_.pose);
 
     static ros::Publisher pub = nh_.advertise<nav_msgs::Path>("debug", 1, true);
 
@@ -319,7 +326,7 @@ void AstarAvoid::mergeAvoidWaypoints(const nav_msgs::Path& path, int& end_of_avo
     return;
   }
 
-  for (int i = 0; i < closest_waypoint_index_; ++i)
+  for (int i = 0; i < start_waypoint_index; ++i)
   {
     avoid_waypoints_.waypoints.push_back(current_waypoints.waypoints.at(i));
   }
