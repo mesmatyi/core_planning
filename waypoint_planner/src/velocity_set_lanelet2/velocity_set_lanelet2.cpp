@@ -677,7 +677,7 @@ int main(int argc, char** argv)
   ros::Publisher stopline_waypoint_pub = rosnode.advertise<std_msgs::Int32>("stopline_waypoint", 1, true);
 
   ros::Publisher final_waypoints_pub;
-  final_waypoints_pub = rosnode.advertise<autoware_msgs::Lane>("final_waypoints", 1, true);
+  final_waypoints_pub = rosnode.advertise<autoware_msgs::Lane>("final_waypoints_from_veloc", 1, true);
 
   ros::Rate loop_rate(LOOP_RATE);
   while (ros::ok())

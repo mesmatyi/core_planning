@@ -41,7 +41,7 @@ def talker():
     global pub
 
     rospy.init_node('talker', anonymous=True)
-    rospy.Subscriber('final_waypoints',Lane,Lanecb)
+    rospy.Subscriber('final_waypoints_for_MPC',Lane,Lanecb)
     pub = rospy.Publisher('final_wp_local', viz.MarkerArray, queue_size=10)
     rospy.spin()
 

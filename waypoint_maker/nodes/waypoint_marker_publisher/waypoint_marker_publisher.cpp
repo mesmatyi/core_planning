@@ -490,7 +490,7 @@ int main(int argc, char** argv)
   ros::Subscriber traffic_array_sub = nh.subscribe("traffic_waypoints_array", 10, laneArrayCallback);
 
   // subscribe local waypoints
-  ros::Subscriber final_sub = nh.subscribe("final_waypoints_for_MPC", 10, finalCallback);
+  ros::Subscriber final_sub = nh.subscribe("base_waypoints", 10, finalCallback);
   ros::Subscriber closest_sub = nh.subscribe("closest_waypoint", 10, closestCallback);
 
   // subscribe config

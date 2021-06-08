@@ -148,7 +148,7 @@ WaypointVelocityVisualizer::WaypointVelocityVisualizer() : node_handle_(), priva
   lane_waypoints_array_sub_ =
       node_handle_.subscribe("lane_waypoints_array", 1, &WaypointVelocityVisualizer::laneWaypointsArrayCallback, this);
   final_waypoints_sub_ =
-      node_handle_.subscribe("final_waypoints", 1, &WaypointVelocityVisualizer::finalWaypointsCallback, this);
+      node_handle_.subscribe("final_waypoints_from_veloc", 1, &WaypointVelocityVisualizer::finalWaypointsCallback, this);
 
   current_pose_sub_ = new message_filters::Subscriber<geometry_msgs::PoseStamped>(node_handle_, "current_pose", 1);
   current_twist_sub_ =

@@ -35,7 +35,7 @@ AstarAvoid::AstarAvoid()
   costmap_sub_ = nh_.subscribe("costmap", 1, &AstarAvoid::costmapCallback, this);
   current_pose_sub_ = nh_.subscribe("current_pose", 1, &AstarAvoid::currentPoseCallback, this);
   current_velocity_sub_ = nh_.subscribe("current_velocity", 1, &AstarAvoid::currentVelocityCallback, this);
-  base_waypoints_sub_ = nh_.subscribe("base_waypoints", 1, &AstarAvoid::baseWaypointsCallback, this);
+  base_waypoints_sub_ = nh_.subscribe("base_waypoints_global_traj", 1, &AstarAvoid::baseWaypointsCallback, this);
   closest_waypoint_sub_ = nh_.subscribe("closest_waypoint", 1, &AstarAvoid::closestWaypointCallback, this);
   obstacle_waypoint_sub_ = nh_.subscribe("obstacle_waypoint", 1, &AstarAvoid::obstacleWaypointCallback, this);
 
@@ -312,7 +312,6 @@ bool AstarAvoid::planAvoidWaypoints(int& end_of_avoid_index)
   ROS_ERROR("Can't find goal...");
   return false;
 }
-
 void AstarAvoid::mergeAvoidWaypoints(const nav_msgs::Path& path, int& end_of_avoid_index)
 {
   autoware_msgs::Lane current_waypoints = avoid_waypoints_;
