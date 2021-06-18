@@ -48,7 +48,7 @@ void VelocitySetPath::setTemporalWaypoints(int temporal_waypoints_size, int clos
   current_point.pose = control_pose;
   current_point.twist = updated_waypoints_.waypoints[closest_waypoint].twist;
   current_point.dtlane = updated_waypoints_.waypoints[closest_waypoint].dtlane;
-  temporal_waypoints_.waypoints.push_back(std::move(current_point));
+  // temporal_waypoints_.waypoints.push_back(std::move(current_point));
 
   int total_waypoints = getNewWaypointsSize();
   for (int i = 0; i < temporal_waypoints_size; i++)

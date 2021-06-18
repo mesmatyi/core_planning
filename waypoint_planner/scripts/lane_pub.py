@@ -22,9 +22,10 @@ sf_pub = None
 closeset_waypoint = Int32()
 
 newLane = Lane()
+base_wp_lane = Lane()
 
 def closestWaypoint(pose_msg):
-    global newLane,cl_waypoint_pub,closeset_waypoint
+    global newLane,cl_waypoint_pub,closeset_waypoint,base_wp_lane
 
 
     rate = rospy.Rate(20)
@@ -113,9 +114,7 @@ def LanetoLaneArr(msg):
         
         
 def LaneArrtoLane(msg):
-    global final_wp_MPC,global_trajectory,closeset_waypoint
-
-    base_wp_lane = Lane()
+    global final_wp_MPC,global_trajectory,closeset_waypoint,base_wp_lane
 
     base_wp_lane.header = newLane.header
     base_wp_lane.header.stamp = rospy.Time.now()
