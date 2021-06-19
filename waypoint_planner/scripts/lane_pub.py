@@ -25,7 +25,7 @@ newLane = Lane()
 base_wp_lane = Lane()
 
 def closestWaypoint(pose_msg):
-    global newLane,cl_waypoint_pub,closeset_waypoint,base_wp_lane
+    global newLane,cl_waypoint_pub,closeset_waypoint
 
 
     rate = rospy.Rate(20)
@@ -95,9 +95,8 @@ def Lanearraycb(LaneMSG):
     #     new_wayp.lid = LaneMSG[0].waypoints[i].lid
 
     if pub is not None:
-        while True:
-            pub.publish(newLane)
-            rate.sleep()
+        pub.publish(newLane)
+        rate.sleep()
 
             
 def LanetoLaneArr(msg):

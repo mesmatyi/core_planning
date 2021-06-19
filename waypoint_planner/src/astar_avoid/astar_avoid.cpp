@@ -150,7 +150,8 @@ void AstarAvoid::run()
     }
     else if (state_ == AstarAvoid::STATE::STOPPING)
     {
-      bool replan = ((ros::WallTime::now() - start_plan_time).toSec() > replan_interval_);
+      // bool replan = ((ros::WallTime::now() - start_plan_time).toSec() > replan_interval_);
+      bool replan = true;
 
       if (!found_obstacle)
       {
@@ -189,15 +190,15 @@ void AstarAvoid::run()
         state_ = AstarAvoid::STATE::RELAYING;
         closest_waypoint_index_ = -1;
       }
-      else if (found_obstacle && avoid_velocity)
-      {
-        bool replan = ((ros::WallTime::now() - start_avoid_time).toSec() > replan_interval_);
-        if (replan)
-        {
-          ROS_INFO("AVOIDING -> STOPPING, Abort avoiding");
-          state_ = AstarAvoid::STATE::STOPPING;
-        }
-      }
+      // else if (found_obstacle && avoid_velocity)
+      // {
+      //   bool replan = ((ros::WallTime::now() - start_avoid_time).toSec() > replan_interval_);
+      //   if (replan)
+      //   {
+      //     ROS_INFO("AVOIDING -> STOPPING, Abort avoiding");
+      //     state_ = AstarAvoid::STATE::STOPPING;
+      //   }
+      // }
     }
 
     rate_->sleep();
