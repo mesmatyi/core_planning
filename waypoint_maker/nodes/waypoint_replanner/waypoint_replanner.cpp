@@ -87,6 +87,7 @@ void WaypointReplanner::replanLaneWaypointVel(autoware_msgs::Lane& lane)
                                                         std::sqrt(config_.lateral_accel_limit * std::fmax(curve_radius[i], config_.radius_min)));
     }
     limitVelocityByRange(0, last, config_.velocity_max, lane);
+    
   }
 
   // set velocity at end of the lane

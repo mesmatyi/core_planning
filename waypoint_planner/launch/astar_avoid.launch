@@ -20,7 +20,7 @@
   <arg name="use_wavefront_heuristic" default="false" />
   <arg name="time_limit" default="60.0" />
   <arg name="robot_length" default="4.5" />
-  <arg name="robot_width" default="1.75" />
+  <arg name="robot_width" default="2.6" />
   <arg name="robot_base2back" default="1.0" />
   <arg name="minimum_turning_radius" default="6.0" />
   <arg name="theta_size" default="48" />
