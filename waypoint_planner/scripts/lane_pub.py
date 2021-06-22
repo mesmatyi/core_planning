@@ -148,7 +148,7 @@ def talker():
     global pub,cl_waypoint_pub,sf_pub,final_wp_arr,final_wp_MPC,base_waypoints_pub
     rospy.init_node('lane_pub_node', anonymous=True)
     pub = rospy.Publisher('base_waypoints_global_traj', Lane, queue_size=10)
-    cl_waypoint_pub = rospy.Publisher('closest_waypoint',Int32,queue_size=10)
+    cl_waypoint_pub = rospy.Publisher('astar_closest_wp',Int32,queue_size=10)
     final_wp_arr = rospy.Publisher('final_waypoints_arr',LaneArray,queue_size=10)
     final_wp_MPC = rospy.Publisher('final_waypoints_for_MPC',Lane,queue_size=10)
     base_waypoints_pub = rospy.Publisher('base_waypoints',Lane,queue_size=10)
