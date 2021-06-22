@@ -80,13 +80,14 @@ void WaypointReplanner::replanLaneWaypointVel(autoware_msgs::Lane& lane)
   {
     std::vector<double> curve_radius;
     createRadiusList(lane, curve_radius);
-    //setVelocityByRange(0, last, config_.velocity_max, lane);
+    setVelocityByRange(0, last, config_.velocity_max, lane);
     for (unsigned long i = 0; i < curve_radius.size(); i++)
     {
       lane.waypoints[i].twist.twist.linear.x = std::fmin(lane.waypoints[i].twist.twist.linear.x,
                                                         std::sqrt(config_.lateral_accel_limit * std::fmax(curve_radius[i], config_.radius_min)));
     }
     limitVelocityByRange(0, last, config_.velocity_max, lane);
+    ROS_INFO("%f",config_.velocity_max);
     
   }
 

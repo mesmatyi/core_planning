@@ -376,7 +376,7 @@ void WaypointVelocityVisualizer::createVelocityTextMarker(const std::vector<nav_
     p.z += plot_height_ratio_ * wp.twist.twist.linear.x + plot_height_shift_;
     marker.pose.position = p;
     std::ostringstream oss;
-    oss << std::fixed << std::setprecision(1) << mps2kmph(wp.twist.twist.linear.x);
+    oss << std::fixed << std::setprecision(1) << wp.twist.twist.linear.x;
     marker.text = oss.str();
     markers.markers.push_back(marker);
   }

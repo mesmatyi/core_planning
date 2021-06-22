@@ -123,10 +123,14 @@ def LaneArrtoLane(msg):
         for i in range(len(global_trajectory.waypoints)):
             if i < closeset_waypoint.data:
                 base_wp_lane.waypoints.append(global_trajectory.waypoints[i])
+                #base_wp_lane.waypoints[i].twist.twist.linear.x = (base_wp_lane.waypoints[i].twist.twist.linear.x * 3.6)
 
     for i in range(len(msg.lanes[0].waypoints)):
         msg.lanes[0].waypoints[i].twist.twist.linear.x = (msg.lanes[0].waypoints[i].twist.twist.linear.x * 3.6)
         base_wp_lane.waypoints.append(msg.lanes[0].waypoints[i])
+        
+    # for i in range(len(base_wp_lane.waypoints)):
+    #     base_wp_lane.waypoints[i].twist.twist.linear.x *= 3.6
 
 
     if base_waypoints_pub is not None:

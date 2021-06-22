@@ -119,7 +119,7 @@ void createGlobalLaneArrayVelocityMarker(const autoware_msgs::LaneArray& lane_wa
       velocity_marker.pose.position.z += 0.2;
 
       // double to string
-      std::string vel = std::to_string(mps2kmph(lane.waypoints[i].twist.twist.linear.x));
+      std::string vel = std::to_string(lane.waypoints[i].twist.twist.linear.x);
       velocity_marker.text = vel.erase(vel.find_first_of(".") + 2);
 
       tmp_marker_array.markers.push_back(velocity_marker);
@@ -217,7 +217,7 @@ void createLocalWaypointVelocityMarker(std_msgs::ColorRGBA color, int closest_wa
 
     // double to string
     std::ostringstream oss;
-    oss << std::fixed << std::setprecision(1) << mps2kmph(lane_waypoint.waypoints[i].twist.twist.linear.x);
+    oss << std::fixed << std::setprecision(1) << lane_waypoint.waypoints[i].twist.twist.linear.x;
     velocity.text = oss.str();
 
     g_local_waypoints_marker_array.markers.push_back(velocity);
