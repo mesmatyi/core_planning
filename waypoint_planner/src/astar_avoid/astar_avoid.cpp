@@ -184,22 +184,22 @@ void AstarAvoid::run()
     else if (state_ == AstarAvoid::STATE::AVOIDING)
     {
       updateClosestWaypoint(avoid_waypoints_, current_pose_global_.pose, closest_search_size_);
-      ROS_INFO("%f --- %f",closest_waypoint_index_,end_of_avoid_index);
+      ROS_INFO("%i --- %i",closest_waypoint_index_,end_of_avoid_index);
       if (closest_waypoint_index_ > end_of_avoid_index)
       {
         ROS_INFO("AVOIDING -> RELAYING, Reached goal");
         state_ = AstarAvoid::STATE::RELAYING;
         closest_waypoint_index_ = -1;
       }
-    //   else if (found_obstacle && avoid_velocity)
-    //   {
-    //     bool replan = ((ros::WallTime::now() - start_avoid_time).toSec() > 3.0);
-    //     if (replan)
-    //     {
-    //       ROS_INFO("AVOIDING -> STOPPING, Abort avoiding");
-    //       state_ = AstarAvoid::STATE::STOPPING;
-    //     }
-    //   }
+      else if (found_obstacle && avoid_velocity)
+      {
+        bool replan = ((ros::WallTime::now() - start_avoid_time).toSec() > 3.0);
+        if (replan)
+        {
+          ROS_INFO("AVOIDING -> STOPPING, Abort avoiding");
+          state_ = AstarAvoid::STATE::STOPPING;
+        }
+      }
     }
 
     rate_->sleep();
@@ -266,7 +266,7 @@ bool AstarAvoid::planAvoidWaypoints(int& end_of_avoid_index)
     //       However, obstacle_waypoint_index_ is published by velocity_set node. The astar_avoid and velocity_set
     //       should be combined together to prevent this kind of inconsistency.
     int goal_waypoint_index = closest_waypoint_index_ + obstacle_waypoint_index_ + i;
-    start_waypoint_index = (closest_waypoint_index_ + obstacle_waypoint_index_) - i;
+    start_waypoint_index = (closest_waypoint_index_ + obstacle_waypoint_index_) - (i + 2);
     if (goal_waypoint_index >= static_cast<int>(avoid_waypoints_.waypoints.size()))
     {
       break;
@@ -350,7 +350,7 @@ void AstarAvoid::mergeAvoidWaypoints(const nav_msgs::Path& path, int& end_of_avo
   }
 
   // update index for merged waypoints
-  end_of_avoid_index = closest_waypoint_index_ + path.poses.size();
+  // end_of_avoid_index = closest_waypoint_index_ + path.poses.size();
 }
 
 void AstarAvoid::publishWaypoints(const ros::TimerEvent& e)
