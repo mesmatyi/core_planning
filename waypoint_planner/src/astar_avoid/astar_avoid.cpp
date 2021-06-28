@@ -275,6 +275,8 @@ bool AstarAvoid::planAvoidWaypoints(int& end_of_avoid_index)
     {
       start_waypoint_index = closest_waypoint_index_;
     }
+    avoid_diff_index = start_waypoint_index - closest_waypoint_index_;
+    ROS_INFO("Avoid diff waypoint index: %i",avoid_diff_index);
 
     // update goal pose
     goal_pose_global_ = avoid_waypoints_.waypoints[goal_waypoint_index].pose;
@@ -350,7 +352,7 @@ void AstarAvoid::mergeAvoidWaypoints(const nav_msgs::Path& path, int& end_of_avo
   }
 
   // update index for merged waypoints
-  // end_of_avoid_index = closest_waypoint_index_ + path.poses.size();
+  end_of_avoid_index = closest_waypoint_index_ + avoid_diff_index + path.poses.size();
 }
 
 void AstarAvoid::publishWaypoints(const ros::TimerEvent& e)

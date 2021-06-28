@@ -88,6 +88,7 @@ private:
   // Not the same as the waypoint gid. This value can change suddenly if the
   // current_waypoints_ switches between base_waypoints_ and avoid_waypoints_.
   int closest_waypoint_index_ = -1;
+  int avoid_diff_index = 0;
 
   // Index of the obstacle relative to closest_waypoint_index_.
   int obstacle_waypoint_index_ = -1;
