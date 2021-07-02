@@ -8,7 +8,7 @@
   <arg name="resample_interval" default="1.0" />
   <arg name="replan_curve_mode" default="false" />
   <arg name="replan_endpoint_mode" default="True" />
-  <arg name="velocity_max" default="5" />
+  <arg name="velocity_max" default="10" />
   <arg name="radius_min" default="6" />
   <arg name="velocity_min" default="4" />
   <arg name="accel_limit" default="0.5" />
