@@ -27,6 +27,10 @@ catkin_package()
 # TODO add all codes to roslint
 roslint_cpp(src/velocity_set_lanelet2/velocity_set_lanelet2.cpp)
 
+catkin_install_python(PROGRAMS scripts/lane_pub.py
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
+
 include_directories(
   include
   ${catkin_INCLUDE_DIRS}

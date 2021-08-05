@@ -153,11 +153,11 @@ void AstarAvoid::run()
       // bool replan = ((ros::WallTime::now() - start_plan_time).toSec() > replan_interval_);
       bool replan = true;
 
-      // if (!found_obstacle)
-      // {
-      //   ROS_INFO("STOPPING -> RELAYING, Obstacle disappers");
-      //   state_ = AstarAvoid::STATE::RELAYING;
-      // }
+      if (!found_obstacle)
+      {
+        ROS_INFO("STOPPING -> RELAYING, Obstacle disappers");
+        state_ = AstarAvoid::STATE::RELAYING;
+      }
       if (replan && avoid_velocity)
       {
         ROS_INFO("STOPPING -> PLANNING, Start A* planning");
@@ -184,7 +184,7 @@ void AstarAvoid::run()
     else if (state_ == AstarAvoid::STATE::AVOIDING)
     {
       updateClosestWaypoint(avoid_waypoints_, current_pose_global_.pose, closest_search_size_);
-      ROS_INFO("%i --- %i",closest_waypoint_index_,end_of_avoid_index);
+      // ROS_INFO("%i --- %i",closest_waypoint_index_,end_of_avoid_index);
       if (closest_waypoint_index_ > end_of_avoid_index)
       {
         ROS_INFO("AVOIDING -> RELAYING, Reached goal");
@@ -276,7 +276,7 @@ bool AstarAvoid::planAvoidWaypoints(int& end_of_avoid_index)
       start_waypoint_index = closest_waypoint_index_;
     }
     avoid_diff_index = start_waypoint_index - closest_waypoint_index_;
-    ROS_INFO("Avoid diff waypoint index: %i",avoid_diff_index);
+    // ROS_INFO("Avoid diff waypoint index: %i",avoid_diff_index);
 
     // update goal pose
     goal_pose_global_ = avoid_waypoints_.waypoints[goal_waypoint_index].pose;

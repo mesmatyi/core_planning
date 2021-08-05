@@ -8,7 +8,7 @@
   <arg name="costmap_topic" default="/semantics/costmap_generator/occupancy_grid" />
   <arg name="enable_avoidance" default="true" />
   <arg name="avoid_waypoints_velocity" default="20.0" />
-  <arg name="avoid_start_velocity" default="10.0" />
+  <arg name="avoid_start_velocity" default="20.0" />
   <arg name="replan_interval" default="1.0" />
   <arg name="search_waypoints_size" default="50" />
   <arg name="search_waypoints_delta" default="2" />
@@ -26,7 +26,7 @@
   <arg name="theta_size" default="30" />
   <arg name="curve_weight" default="3.0" />
   <arg name="reverse_weight" default="2.00" />
-  <arg name="lateral_goal_range" default="0.1" />
+  <arg name="lateral_goal_range" default="0.5" />
   <arg name="longitudinal_goal_range" default="2.0" />
   <arg name="angle_goal_range" default="6.0" />
   <arg name="obstacle_threshold" default="100" />

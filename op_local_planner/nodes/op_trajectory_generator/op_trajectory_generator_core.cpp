@@ -32,7 +32,7 @@ TrajectoryGen::TrajectoryGen()
   UpdatePlanningParams(_nh);
 
   tf::StampedTransform transform;
-  PlannerHNS::ROSHelpers::GetTransformFromTF("map", "world", transform);
+  PlannerHNS::ROSHelpers::GetTransformFromTF("map", "map", transform);
   m_OriginPos.position.x  = transform.getOrigin().x();
   m_OriginPos.position.y  = transform.getOrigin().y();
   m_OriginPos.position.z  = transform.getOrigin().z();

@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+
+
 import rospy
 import math
 
@@ -150,7 +153,7 @@ def talker():
     pub = rospy.Publisher('base_waypoints_global_traj', Lane, queue_size=10)
     cl_waypoint_pub = rospy.Publisher('astar_closest_wp',Int32,queue_size=10)
     final_wp_arr = rospy.Publisher('final_waypoints_arr',LaneArray,queue_size=10)
-    final_wp_MPC = rospy.Publisher('final_waypoints_for_MPC',Lane,queue_size=10)
+    final_wp_MPC = rospy.Publisher('final_waypoints',Lane,queue_size=10)
     base_waypoints_pub = rospy.Publisher('base_waypoints',Lane,queue_size=10)
     rospy.Subscriber('based/lane_waypoints_raw',LaneArray,Lanearraycb)
     rospy.Subscriber('/current_pose',PoseStamped,closestWaypoint)
