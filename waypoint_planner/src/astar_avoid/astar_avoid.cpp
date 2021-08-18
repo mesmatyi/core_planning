@@ -153,11 +153,11 @@ void AstarAvoid::run()
       // bool replan = ((ros::WallTime::now() - start_plan_time).toSec() > replan_interval_);
       bool replan = true;
 
-      if (!found_obstacle)
-      {
-        ROS_INFO("STOPPING -> RELAYING, Obstacle disappers");
-        state_ = AstarAvoid::STATE::RELAYING;
-      }
+      // if (!found_obstacle)
+      // {
+      //   ROS_INFO("STOPPING -> RELAYING, Obstacle disappers");
+      //   state_ = AstarAvoid::STATE::RELAYING;
+      // }
       if (replan && avoid_velocity)
       {
         ROS_INFO("STOPPING -> PLANNING, Start A* planning");
