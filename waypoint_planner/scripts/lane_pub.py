@@ -23,6 +23,7 @@ final_wp_arr = None
 final_wp_MPC = None
 sf_pub = None
 closeset_waypoint = Int32()
+base_waypoint_store = None
 
 newLane = Lane()
 
@@ -114,27 +115,54 @@ def LanetoLaneArr(msg):
         final_wp_arr.publish(LaneArr)
         
         
+def sq_dist(wp_one,wp_two):
+    
+    return math.hypot(wp_two.pose.pose.position.x - wp_one.pose.pose.position.x,wp_two.pose.pose.position.y - wp_one.pose.pose.position.y)
+        
+        
 def LaneArrtoLane(msg):
-    global final_wp_MPC,global_trajectory,closeset_waypoint
+    global final_wp_MPC,global_trajectory,closeset_waypoint,base_waypoint_store
 
     base_wp_lane = Lane()
 
     base_wp_lane.header = newLane.header
     base_wp_lane.header.stamp = rospy.Time.now()
 
-    if global_trajectory is not None:
-        for i in range(len(global_trajectory.waypoints)):
-            if i < closeset_waypoint.data:
-                base_wp_lane.waypoints.append(global_trajectory.waypoints[i])
+    # if global_trajectory is not None:
+    #     for i in range(len(global_trajectory.waypoints)):
+    #         if i < closeset_waypoint.data:
+    #             base_wp_lane.waypoints.append(global_trajectory.waypoints[i])
                 #base_wp_lane.waypoints[i].twist.twist.linear.x = (base_wp_lane.waypoints[i].twist.twist.linear.x * 3.6)
 
     for i in range(len(msg.lanes[0].waypoints)):
         msg.lanes[0].waypoints[i].twist.twist.linear.x = (msg.lanes[0].waypoints[i].twist.twist.linear.x * 3.6)
-        base_wp_lane.waypoints.append(msg.lanes[0].waypoints[i])
+        # base_wp_lane.waypoints.append(msg.lanes[0].waypoints[i])
         
     # for i in range(len(base_wp_lane.waypoints)):
     #     base_wp_lane.waypoints[i].twist.twist.linear.x *= 3.6
-
+    
+    
+    
+    if base_waypoint_store is None:
+        base_waypoint_store = msg.lanes[0]
+        base_wp_lane = base_waypoint_store
+        
+    else:        
+        base_index = len(base_waypoint_store.waypoints) - 200
+        if(base_index < 0):
+            base_index = 0
+        print(base_index)
+        for base_waypoint in range(base_index,len(base_waypoint_store.waypoints)):
+                if sq_dist(base_waypoint_store.waypoints[base_waypoint],msg.lanes[0].waypoints[0]) > 0.4:
+                    base_wp_lane.waypoints.append(base_waypoint_store.waypoints[base_waypoint])
+                else:
+                    break
+                
+        for final_waypoint in msg.lanes[0].waypoints:
+            base_wp_lane.waypoints.append(final_waypoint)
+            
+        base_waypoint_store = base_wp_lane
+        
 
     if base_waypoints_pub is not None:
         base_waypoints_pub.publish(base_wp_lane)
