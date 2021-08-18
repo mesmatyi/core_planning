@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 
+from geometry_msgs import msg
 import rospy
 import math
 
@@ -23,12 +24,15 @@ final_wp_arr = None
 final_wp_MPC = None
 sf_pub = None
 closeset_waypoint = Int32()
-base_waypoint_store = None
+base_waypoint_store = Lane()
+current_pose = PoseStamped()
 
 newLane = Lane()
 
 def closestWaypoint(pose_msg):
-    global newLane,cl_waypoint_pub,closeset_waypoint
+    global newLane,cl_waypoint_pub,closeset_waypoint,current_pose
+    
+    current_pose = pose_msg
 
 
     rate = rospy.Rate(20)
@@ -121,12 +125,14 @@ def sq_dist(wp_one,wp_two):
         
         
 def LaneArrtoLane(msg):
-    global final_wp_MPC,global_trajectory,closeset_waypoint,base_waypoint_store
+    global final_wp_MPC,global_trajectory,closeset_waypoint,base_waypoint_store,current_pose
 
     base_wp_lane = Lane()
 
     base_wp_lane.header = newLane.header
     base_wp_lane.header.stamp = rospy.Time.now()
+    
+    print("Final wp length:" + str(len(msg.lanes[0].waypoints)))
 
     # if global_trajectory is not None:
     #     for i in range(len(global_trajectory.waypoints)):
@@ -143,20 +149,55 @@ def LaneArrtoLane(msg):
     
     
     
-    if base_waypoint_store is None:
-        base_waypoint_store = msg.lanes[0]
-        base_wp_lane = base_waypoint_store
+    if len(base_waypoint_store.waypoints) == 0:
+        x = current_pose.pose.position.x
+        y = current_pose.pose.position.y
+
+        min_dist = 10000
+        i_max = 0
+
+        for i in range(len(msg.lanes[0].waypoints)):
+            wp_x = msg.lanes[0].waypoints[i].pose.pose.position.x
+            wp_y = msg.lanes[0].waypoints[i].pose.pose.position.y
+            dist = math.sqrt(math.pow(x - wp_x,2) + math.pow(y - wp_y,2))
+            if dist < min_dist:
+                min_dist = dist
+                i_max = i
+                
+        start_index = i_max - 100
+        if start_index < 0:
+            start_index = 0
+            
+        if global_trajectory is not None:
+            for i in range(start_index,len(global_trajectory.waypoints)):
+                    base_waypoint_store.waypoints.append(global_trajectory.waypoints[i])                   
         
-    else:        
-        base_index = len(base_waypoint_store.waypoints) - 200
+        
+        
+    else:
+        x = current_pose.pose.position.x
+        y = current_pose.pose.position.y
+
+        min_dist = 10000
+        i_max = 0
+
+        print("Store length: " + str(len(base_waypoint_store.waypoints)))
+        for i in range(len(base_waypoint_store.waypoints)):
+            wp_x = base_waypoint_store.waypoints[i].pose.pose.position.x
+            wp_y = base_waypoint_store.waypoints[i].pose.pose.position.y
+            dist = math.sqrt(math.pow(x - wp_x,2) + math.pow(y - wp_y,2))
+            if dist < min_dist:
+                min_dist = dist
+                i_max = i
+           
+        base_index = len(base_waypoint_store.waypoints) - (i_max + 100)
         if(base_index < 0):
             base_index = 0
-        print(base_index)
-        for base_waypoint in range(base_index,len(base_waypoint_store.waypoints)):
-                if sq_dist(base_waypoint_store.waypoints[base_waypoint],msg.lanes[0].waypoints[0]) > 0.4:
-                    base_wp_lane.waypoints.append(base_waypoint_store.waypoints[base_waypoint])
-                else:
-                    break
+        
+        
+        print(len(base_waypoint_store.waypoints),base_index,i_max)
+        for base_waypoint in range(base_index,i_max):
+                base_wp_lane.waypoints.append(base_waypoint_store.waypoints[base_waypoint])
                 
         for final_waypoint in msg.lanes[0].waypoints:
             base_wp_lane.waypoints.append(final_waypoint)
