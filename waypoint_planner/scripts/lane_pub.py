@@ -31,9 +31,8 @@ newLane = Lane()
 
 def closestWaypoint(pose_msg):
     global newLane,cl_waypoint_pub,closeset_waypoint,current_pose
-    
-    current_pose = pose_msg
 
+    current_pose = pose_msg
 
     rate = rospy.Rate(20)
     x = pose_msg.pose.position.x
@@ -180,28 +179,28 @@ def LaneArrtoLane(msg):
 
         min_dist = 10000
         i_max = 0
+        closest_pose = PoseStamped()
 
-        print("Store length: " + str(len(base_waypoint_store.waypoints)))
-        for i in range(len(base_waypoint_store.waypoints)):
-            wp_x = base_waypoint_store.waypoints[i].pose.pose.position.x
-            wp_y = base_waypoint_store.waypoints[i].pose.pose.position.y
-            dist = math.sqrt(math.pow(x - wp_x,2) + math.pow(y - wp_y,2))
+        
+        for base_wp in range(0,len(base_waypoint_store.waypoints)):
+            dist = sq_dist(base_waypoint_store.waypoints[base_wp],msg.lanes[0].waypoints[0])
             if dist < min_dist:
                 min_dist = dist
-                i_max = i
+                i_max = base_wp
+
            
-        base_index = len(base_waypoint_store.waypoints) - (i_max + 100)
+        base_index = i_max - 100
         if(base_index < 0):
             base_index = 0
         
         
-        print(len(base_waypoint_store.waypoints),base_index,i_max)
-        for base_waypoint in range(base_index,i_max):
-                base_wp_lane.waypoints.append(base_waypoint_store.waypoints[base_waypoint])
+
+        for i in range(0,i_max):
+                base_wp_lane.waypoints.append(base_waypoint_store.waypoints[i])
                 
         for final_waypoint in msg.lanes[0].waypoints:
             base_wp_lane.waypoints.append(final_waypoint)
-            
+
         base_waypoint_store = base_wp_lane
         
 
