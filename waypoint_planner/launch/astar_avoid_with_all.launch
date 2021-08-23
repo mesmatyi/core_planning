@@ -1,9 +1,10 @@
 <launch>
 
+  <node pkg="topic_tools" type="relay" name="relay_stable_gp_to_mv_base" args="/stable_goalpose /move_base_simple/goal" />
+
   <node pkg="ll2_global_planner" type="ll2_global_planner_node" name="ll2_global_planner" output="screen">
     <rosparam command="load" file="$(find ll2_global_planner)/config/params.yaml" />
   </node>
-
 
   <node pkg="waypoint_maker" type="waypoint_replanner" name="waypoint_replanner" output="screen">
     <param name="replanning_mode" value="True" />
