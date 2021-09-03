@@ -193,9 +193,8 @@ def LaneArrtoLane(msg):
         if(base_index < 0):
             base_index = 0
         
-        
 
-        for i in range(0,i_max):
+        for i in range(base_index,i_max):
                 base_wp_lane.waypoints.append(base_waypoint_store.waypoints[i])
                 
         for final_waypoint in msg.lanes[0].waypoints:
