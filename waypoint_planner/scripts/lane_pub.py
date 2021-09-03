@@ -130,8 +130,6 @@ def LaneArrtoLane(msg):
 
     base_wp_lane.header = newLane.header
     base_wp_lane.header.stamp = rospy.Time.now()
-    
-    print("Final wp length:" + str(len(msg.lanes[0].waypoints)))
 
     # if global_trajectory is not None:
     #     for i in range(len(global_trajectory.waypoints)):
