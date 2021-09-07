@@ -9,6 +9,7 @@ from autoware_msgs.msg import LaneArray
 from autoware_msgs.msg import Lane
 from autoware_msgs.msg import Waypoint
 from autoware_msgs.msg import DTLane
+from nav_msgs.msg import Path
 from geometry_msgs.msg import PoseStamped
 from geometry_msgs.msg import TwistStamped
 from autoware_msgs.msg import WaypointState
@@ -124,12 +125,17 @@ def sq_dist(wp_one,wp_two):
         
         
 def LaneArrtoLane(msg):
-    global final_wp_MPC,global_trajectory,closeset_waypoint,base_waypoint_store,current_pose
+    global final_wp_MPC,global_trajectory,closeset_waypoint,base_waypoint_store,current_pose,raw_path_pub
 
     base_wp_lane = Lane()
 
     base_wp_lane.header = newLane.header
     base_wp_lane.header.stamp = rospy.Time.now()
+
+    raw_path = Path()
+
+    raw_path.header.frame_id = 'map'
+    raw_path.header.stamp = rospy.Time.now()
 
     # if global_trajectory is not None:
     #     for i in range(len(global_trajectory.waypoints)):
@@ -197,9 +203,13 @@ def LaneArrtoLane(msg):
                 
         for final_waypoint in msg.lanes[0].waypoints:
             base_wp_lane.waypoints.append(final_waypoint)
+            raw_path.poses.append(final_waypoint.pose)
 
         base_waypoint_store = base_wp_lane
         
+
+    if raw_path_pub is not None:
+        raw_path_pub.publish(raw_path)
 
     if base_waypoints_pub is not None:
         base_waypoints_pub.publish(base_wp_lane)
@@ -213,13 +223,14 @@ def LaneArrtoLane(msg):
     
 
 def talker():
-    global pub,cl_waypoint_pub,sf_pub,final_wp_arr,final_wp_MPC,base_waypoints_pub
+    global pub,cl_waypoint_pub,sf_pub,final_wp_arr,final_wp_MPC,base_waypoints_pub,raw_path_pub
     rospy.init_node('lane_pub_node', anonymous=True)
     pub = rospy.Publisher('base_waypoints_global_traj', Lane, queue_size=10)
     cl_waypoint_pub = rospy.Publisher('astar_closest_wp',Int32,queue_size=10)
     final_wp_arr = rospy.Publisher('final_waypoints_arr',LaneArray,queue_size=10)
     final_wp_MPC = rospy.Publisher('final_waypoints',Lane,queue_size=10)
     base_waypoints_pub = rospy.Publisher('base_waypoints',Lane,queue_size=10)
+    raw_path_pub = rospy.Publisher('raw_path',Path,queue_size=1000)
     rospy.Subscriber('based/lane_waypoints_raw',LaneArray,Lanearraycb)
     rospy.Subscriber('/current_pose',PoseStamped,closestWaypoint)
     rospy.Subscriber('final_waypoints_from_veloc',Lane,LanetoLaneArr)
