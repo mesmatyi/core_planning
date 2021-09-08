@@ -58,6 +58,7 @@ public:
 
   void init();
   void run();
+  void spin();
 
 private:
   friend class TestClass;
