@@ -27,6 +27,7 @@ sf_pub = None
 closeset_waypoint = Int32()
 base_waypoint_store = Lane()
 current_pose = PoseStamped()
+count = 0
 
 newLane = Lane()
 
@@ -107,25 +108,73 @@ def Lanearraycb(LaneMSG):
 
             
 def LanetoLaneArr(msg):
-    global final_wp_arr,avoid_waypoints
+    global final_wp_arr,avoid_waypoints,raw_path_pub,count
 
     avoid_waypoints = msg
-      
-    LaneArr = LaneArray()
-    LaneArr.id = 0
-    LaneArr.lanes.append(msg)
+
+    raw_path = Path()
+
+    raw_path.header.frame_id = 'map'
+    raw_path.header.stamp = rospy.Time.now()
+
+    for waypoint in msg.waypoints:
+        raw_path.poses.append(waypoint.pose)
     
-    if final_wp_arr is not None:
-        final_wp_arr.publish(LaneArr)
-        
-        
+    if raw_path_pub is not None and len(raw_path.poses) > 2:
+        raw_path_pub.publish(raw_path)
+
+
 def sq_dist(wp_one,wp_two):
     
     return math.hypot(wp_two.pose.pose.position.x - wp_one.pose.pose.position.x,wp_two.pose.pose.position.y - wp_one.pose.pose.position.y)
+
+
+def Smooth_to_wp(msg):
+    global final_wp_arr,avoid_waypoints
+
+    lane_arr = LaneArray()
+    lane = Lane()
+
+    prev_wp = None
+
+
+    for pose in msg.poses:
+        wp = Waypoint()
+        wp.pose = pose
+        wp.twist.twist.linear.x = 2.7
+        if prev_wp is not None:
+            if sq_dist(prev_wp,wp) < 2.0:
+                lane.waypoints.append(wp)
+                prev_wp = wp
+        else:
+            prev_wp = wp
+            lane.waypoints.append(wp)
+
+    min_index = min(len(avoid_waypoints.waypoints),len(lane.waypoints))
+
+    for i in range(min_index):
+        lane.waypoints[i].twist.twist.linear.x = avoid_waypoints.waypoints[i].twist.twist.linear.x
+
+    lane.waypoints[len(lane.waypoints)-1].twist.twist.linear.x = 0.0
+
+    lane_arr.lanes.append(lane)
+
+
+    if final_wp_arr is not None:
+        final_wp_arr.publish(lane_arr)
+        
         
         
 def LaneArrtoLane(msg):
     global final_wp_MPC,global_trajectory,closeset_waypoint,base_waypoint_store,current_pose,raw_path_pub
+
+
+    # print("--- --- ---")
+
+    # for wp_speed in msg.lanes[0].waypoints:
+    #     print(wp_speed.twist.twist.linear.x)
+
+    # print("\n\n")
 
     base_wp_lane = Lane()
 
@@ -203,13 +252,10 @@ def LaneArrtoLane(msg):
                 
         for final_waypoint in msg.lanes[0].waypoints:
             base_wp_lane.waypoints.append(final_waypoint)
-            raw_path.poses.append(final_waypoint.pose)
 
         base_waypoint_store = base_wp_lane
         
 
-    if raw_path_pub is not None:
-        raw_path_pub.publish(raw_path)
 
     if base_waypoints_pub is not None:
         base_waypoints_pub.publish(base_wp_lane)
@@ -235,6 +281,7 @@ def talker():
     rospy.Subscriber('/current_pose',PoseStamped,closestWaypoint)
     rospy.Subscriber('final_waypoints_from_veloc',Lane,LanetoLaneArr)
     rospy.Subscriber('final_waypoints_rp',LaneArray,LaneArrtoLane)
+    rospy.Subscriber('smoothed_path',Path,Smooth_to_wp)
     #rospy.Subscriber('/safety_waypoints',Lane,safety_Lane)
     #sf_pub = rospy.Publisher('safety_waypoints_array',LaneArray,queue_size=10)
     rospy.spin()

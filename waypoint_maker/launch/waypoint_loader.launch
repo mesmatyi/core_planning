@@ -4,7 +4,7 @@
   <arg name="multi_lane_csv" default="/tmp/driving_lane.csv" />
   <arg name="replanning_mode" default="True" />
   <arg name="realtime_tuning_mode" default="True" />
-  <arg name="resample_mode" default="True" />
+  <arg name="resample_mode" default="false" />
   <arg name="resample_interval" default="1.0" />
   <arg name="replan_curve_mode" default="false" />
   <arg name="replan_endpoint_mode" default="True" />
