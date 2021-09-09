@@ -141,7 +141,7 @@ void CostmapGeneratorLanelet2::spin()
     in_header.stamp = ros::Time::now();
     publishRosMsg(costmap_, in_header);
 
-    rate_.sleep();
+    // rate_.sleep();
   }
   
 }

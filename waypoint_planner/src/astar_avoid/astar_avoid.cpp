@@ -259,7 +259,7 @@ bool AstarAvoid::planAvoidWaypoints(int& end_of_avoid_index)
   }
 
   // update start and goal pose incrementally and execute A* search
-  for (int i = search_waypoints_delta_; i < static_cast<int>(search_waypoints_size_); i += search_waypoints_delta_)
+  for (int i = static_cast<int>(search_waypoints_size_); i > search_waypoints_delta_; i -= search_waypoints_delta_)
   {
     // update goal index
     // Note: obstacle_waypoint_index_ is supposed to be relative to closest_waypoint_index_.
