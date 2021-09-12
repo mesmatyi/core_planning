@@ -1,5 +1,20 @@
 <launch>
 
+  <node pkg="map_file" type="lanelet2_map_loader" name="lanelet2_map_loader" output="screen">
+    <param name="lanelet2_path" value='/home/$(env USER)/lanelet2_maps/ZalaZone/ZalaZone_Uni_track_full_early.osm' />
+  </node>
+  <node pkg="map_file" type="lanelet2_map_visualization" name="lanelet2_map_visualization" output="screen" />
+
+  <node
+    name="path_smoothing_demo"
+    pkg="path_smoothing_ros"
+    type="demo"
+    output="screen">
+
+    <rosparam file="$(find path_smoothing_ros)/config/path.yaml" command="load" />
+
+  </node>
+
   <node pkg="topic_tools" type="relay" name="relay_stable_gp_to_mv_base" args="/stable_goalpose /move_base_simple/goal" />
 
   <node pkg="ll2_global_planner" type="ll2_global_planner_node" name="ll2_global_planner" output="screen">
@@ -48,15 +63,15 @@
     <param name="grid_min_value" value="0.0" />
     <param name="grid_max_value" value="1.0" />
     <param name="grid_resolution" value="0.2" />
-    <param name="grid_length_x" value="60" />
-    <param name="grid_length_y" value="40" />
-    <param name="grid_position_x" value="20" />
+    <param name="grid_length_x" value="80" />
+    <param name="grid_length_y" value="50" />
+    <param name="grid_position_x" value="30" />
     <param name="grid_position_y" value="0" />
     <param name="maximum_lidar_height_thres" value="0.3" />
     <param name="minimum_lidar_height_thres" value="-2.2" />
-    <param name="expand_polygon_size" value="1.5" />
+    <param name="expand_polygon_size" value="2.5" />
     <param name="size_of_expansion_kernel" value="9" />
-    <param name="use_objects_box" value="false" />
+    <param name="use_objects_box" value="true" />
     <param name="use_objects_convex_hull" value="true" />
     <param name="use_points" value="true" />
     <param name="use_wayarea" value="true" />
@@ -91,7 +106,7 @@
 
     <remap from="costmap" to="/semantics/costmap_generator/occupancy_grid" />
     <param name="enable_avoidance" value="true" />
-    <param name="search_waypoints_size" value="80" />
+    <param name="search_waypoints_size" value="50" />
     <param name="search_waypoints_delta" value="2" />
     <param name="closest_search_size" value="100" />
     <param name="avoid_waypoints_velocity" value="20" />
@@ -103,17 +118,17 @@
     <param name="use_wavefront_heuristic" value="false" />
     <param name="time_limit" value="60" />
     <param name="robot_length" value="4.5" />
-    <param name="robot_width" value="2.7" />
+    <param name="robot_width" value="1.75" />
     <param name="robot_base2back" value="1.0" />
-    <param name="minimum_turning_radius" value="12.0" />
-    <param name="theta_size" value="30" />
-    <param name="angle_goal_range" value="6.0" />
-    <param name="curve_weight" value="3.0" />
+    <param name="minimum_turning_radius" value="10.0" />
+    <param name="theta_size" value="42" />
+    <param name="angle_goal_range" value="5.0" />
+    <param name="curve_weight" value="1.2" />
     <param name="reverse_weight" value="2.0" />
-    <param name="lateral_goal_range" value="0.5" />
-    <param name="longitudinal_goal_range" value="2.0" />
+    <param name="lateral_goal_range" value="0.4" />
+    <param name="longitudinal_goal_range" value="1.0" />
     <param name="obstacle_threshold" value="100" />
     <param name="potential_weight" value="10.0" />
-    <param name="distance_heuristic_weight" value="5.0" />
+    <param name="distance_heuristic_weight" value="0.85" />
   </node>
 </launch>

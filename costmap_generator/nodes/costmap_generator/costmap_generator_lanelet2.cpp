@@ -43,6 +43,10 @@ CostmapGeneratorLanelet2::CostmapGeneratorLanelet2()
   , LANELET2_COSTMAP_LAYER_("lanelet2")
   , COMBINED_COSTMAP_LAYER_("costmap")
 {
+}
+
+void CostmapGeneratorLanelet2::init()
+{
   private_nh_.param<std::string>("lidar_frame", lidar_frame_, "velodyne");
   private_nh_.param<std::string>("map_frame", map_frame_, "map");
   private_nh_.param<double>("grid_min_value", grid_min_value_, 0.0);
@@ -62,6 +66,11 @@ CostmapGeneratorLanelet2::CostmapGeneratorLanelet2()
   private_nh_.param<int>("size_of_expansion_kernel", size_of_expansion_kernel_, 9);
 
   initGridmap();
+
+}
+
+void CostmapGeneratorLanelet2::run()
+{
   pub_costmap_ = nh_.advertise<grid_map_msgs::GridMap>("semantics/costmap", 1);
   pub_occupancy_grid_ = nh_.advertise<nav_msgs::OccupancyGrid>("semantics/costmap_generator/occupancy_grid", 1);
 
@@ -71,15 +80,6 @@ CostmapGeneratorLanelet2::CostmapGeneratorLanelet2()
   sub_points_ = nh_.subscribe("points_no_ground", 1, &CostmapGeneratorLanelet2::sensorPointsCallback, this);
 
   sub_lanelet_bin_map_ = nh_.subscribe("lanelet_map_bin", 1, &CostmapGeneratorLanelet2::laneletBinMapCallback, this);
-}
-
-void CostmapGeneratorLanelet2::init()
-{
-
-}
-
-void CostmapGeneratorLanelet2::run()
-{
 }
 
 void CostmapGeneratorLanelet2::loadRoadAreasFromLaneletMap(const lanelet::LaneletMapPtr lanelet_map,
@@ -141,7 +141,7 @@ void CostmapGeneratorLanelet2::spin()
     in_header.stamp = ros::Time::now();
     publishRosMsg(costmap_, in_header);
 
-    // rate_.sleep();
+    rate_.sleep();
   }
   
 }
@@ -180,7 +180,7 @@ void CostmapGeneratorLanelet2::objectsCallback(const autoware_msgs::DetectedObje
   costmap_[COMBINED_COSTMAP_LAYER_] = generateCombinedCostmap();
 
   std_msgs::Header in_header = in_objects->header;
-  // publishRosMsg(costmap_, in_header);
+  publishRosMsg(costmap_, in_header);
 }
 
 void CostmapGeneratorLanelet2::sensorPointsCallback(const sensor_msgs::PointCloud2::ConstPtr& in_sensor_points_msg)
@@ -197,7 +197,7 @@ void CostmapGeneratorLanelet2::sensorPointsCallback(const sensor_msgs::PointClou
   costmap_[COMBINED_COSTMAP_LAYER_] = generateCombinedCostmap();
 
   std_msgs::Header in_header = in_sensor_points_msg->header;
-  // publishRosMsg(costmap_, in_header);
+  publishRosMsg(costmap_, in_header);
 }
 
 void CostmapGeneratorLanelet2::initGridmap()

@@ -35,9 +35,11 @@ int main(int argc, char** argv)
 {
   ros::init(argc, argv, "costmap_generator_lanelet2");
   CostmapGeneratorLanelet2 costmap_generator_ll2;
-  // costmap_generator_ll2.init();
-  // costmap_generator_ll2.run();
-  costmap_generator_ll2.spin();
+  costmap_generator_ll2.init();
+  costmap_generator_ll2.run();
+  // costmap_generator_ll2.spin();
+
+  ros::spin();
 
   return 0;
 }
