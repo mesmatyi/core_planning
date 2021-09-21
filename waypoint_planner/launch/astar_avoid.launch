@@ -6,6 +6,7 @@
 
   <!-- Avoidance behavior configurations -->
   <arg name="costmap_topic" default="/semantics/costmap_generator/occupancy_grid" />
+  <arg name="obstacle_wp_topic" default="/obstacle_waypoint" />
   <arg name="enable_avoidance" default="true" />
   <arg name="avoid_waypoints_velocity" default="20.0" />
   <arg name="avoid_start_velocity" default="20.0" />

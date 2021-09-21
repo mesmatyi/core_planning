@@ -20,6 +20,8 @@ AstarAvoid::AstarAvoid()
   : nh_()
   , private_nh_("~")
 {
+
+  std::string obstacle_wp_name;
   private_nh_.param<int>("safety_waypoints_size", safety_waypoints_size_, 100);
   private_nh_.param<double>("update_rate", update_rate_, 10.0);
 
@@ -30,6 +32,7 @@ AstarAvoid::AstarAvoid()
   private_nh_.param<int>("search_waypoints_size", search_waypoints_size_, 50);
   private_nh_.param<int>("search_waypoints_delta", search_waypoints_delta_, 2);
   private_nh_.param<int>("closest_search_size", closest_search_size_, 30);
+private_nh_.param<std::string>("obstacle_wp_topic", obstacle_wp_name, "obstacle_waypoint");
 
   safety_waypoints_pub_ = nh_.advertise<autoware_msgs::Lane>("safety_waypoints", 1, true);
   costmap_sub_ = nh_.subscribe("costmap", 1, &AstarAvoid::costmapCallback, this);
@@ -37,7 +40,7 @@ AstarAvoid::AstarAvoid()
   current_velocity_sub_ = nh_.subscribe("current_velocity", 1, &AstarAvoid::currentVelocityCallback, this);
   base_waypoints_sub_ = nh_.subscribe("base_waypoints_global_traj", 1, &AstarAvoid::baseWaypointsCallback, this);
   closest_waypoint_sub_ = nh_.subscribe("astar_closest_wp", 1, &AstarAvoid::closestWaypointCallback, this);
-  obstacle_waypoint_sub_ = nh_.subscribe("obstacle_waypoint", 1, &AstarAvoid::obstacleWaypointCallback, this);
+  obstacle_waypoint_sub_ = nh_.subscribe(obstacle_wp_name, 1, &AstarAvoid::obstacleWaypointCallback, this);
 
   rate_ = new ros::Rate(update_rate_);
 }

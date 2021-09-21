@@ -44,14 +44,14 @@
     <node pkg="points_preprocessor" type="ray_ground_filter" name="ray_ground_filter" output="log">
         <param name="input_point_topic" value="/left_os1/os1_cloud_node/points" />
         <param name="base_frame" value="left_os1/os1_sensor" />
-        <param name="clipping_height" value="1.75" />
-        <param name="min_point_distance" value="1.85" />
-        <param name="radial_divider_angle" value="0.5" />
-        <param name="concentric_divider_distance" value="0.0" />
-        <param name="local_max_slope" value="19" />
-        <param name="general_max_slope" value="19" />
-        <param name="min_height_threshold" value="0.15" />
-        <param name="reclass_distance_threshold" value="0.4" />
+        <param name="clipping_height" value="0.2" />
+        <param name="min_point_distance" value="2.15" />
+        <param name="radial_divider_angle" value="0.22" />
+        <param name="concentric_divider_distance" value="0.01" />
+        <param name="local_max_slope" value="20" />
+        <param name="general_max_slope" value="20" />
+        <param name="min_height_threshold" value="0.06" />
+        <param name="reclass_distance_threshold" value="0.3" />
         <param name="no_ground_point_topic" value="points_no_ground" />
         <param name="ground_point_topic" value="points_ground" />
     </node>
@@ -69,7 +69,7 @@
     <param name="grid_position_y" value="0" />
     <param name="maximum_lidar_height_thres" value="0.3" />
     <param name="minimum_lidar_height_thres" value="-2.2" />
-    <param name="expand_polygon_size" value="2.5" />
+    <param name="expand_polygon_size" value="0.85" />
     <param name="size_of_expansion_kernel" value="9" />
     <param name="use_objects_box" value="true" />
     <param name="use_objects_convex_hull" value="true" />
